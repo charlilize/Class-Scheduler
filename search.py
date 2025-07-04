@@ -6,7 +6,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import time
 
+# Function to type text in field slowly
 def typeInField(inputElement, text):
+  text = str(text)
+
+  inputElement.clear()
+
   for char in text:
     inputElement.send_keys(char)
     time.sleep(0.5)
@@ -47,12 +52,9 @@ print("✅ Entering class name...")
 
 # Get the class input field and clear it
 classInputElement = driver.find_element(By.ID, classSearchFieldID)
-classInputElement.clear()
 
 # Enter class slowly
-for char in subject:
-  classInputElement.send_keys(char)
-  time.sleep(0.5)
+typeInField(classInputElement, subject)
 
 try: 
   WebDriverWait(driver, 10).until(EC.presence_of_element_located(
@@ -62,9 +64,7 @@ except:
    print("Couldn't enter course number")
 
 CourseNumInputElement = driver.find_element(By.ID, courseNumberFieldID)
-CourseNumInputElement.clear()
 
 # Enter course number slowly
-for char in str(courseNumber):
-  CourseNumInputElement.send_keys(char)
-  time.sleep(0.5)
+typeInField(CourseNumInputElement, courseNumber)
+
