@@ -13,6 +13,8 @@ import time
 
 subject = "CS"
 course_number = 370
+course_number_field_ID = "SSR_CLSRCH_WRK_CATALOG_NBR$1"
+class_search_field_ID = "SSR_CLSRCH_WRK_SUBJECT$0"
 
 service = Service(executable_path="./chromedriver")
 driver = webdriver.Chrome(service=service)
@@ -32,7 +34,7 @@ driver.switch_to.frame(iframes[0])
 # Wait for 5 seconds for the element to exist before crashing program
 try: 
   WebDriverWait(driver, 10).until(EC.presence_of_element_located(
-  (By.ID, "SSR_CLSRCH_WRK_SUBJECT$0")
+  (By.ID, class_search_field_ID)
   ))
 except:
    print("Couldn't enter class subject")
@@ -40,10 +42,25 @@ except:
 print("✅ Entering class name...")
 
 # Get the class input field and clear it
-input_class_element = driver.find_element(By.ID, "SSR_CLSRCH_WRK_SUBJECT$0")
+input_class_element = driver.find_element(By.ID, class_search_field_ID)
 input_class_element.clear()
 
 # Enter class slowly
 for char in subject:
   input_class_element.send_keys(char)
+  time.sleep(0.5)
+
+try: 
+  WebDriverWait(driver, 10).until(EC.presence_of_element_located(
+  (By.ID, course_number_field_ID)
+  ))
+except:
+   print("Couldn't enter course number")
+
+input_course_num_element = driver.find_element(By.ID, course_number_field_ID)
+input_course_num_element.clear()
+
+# Enter course number slowly
+for char in str(course_number):
+  input_course_num_element.send_keys(char)
   time.sleep(0.5)
