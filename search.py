@@ -3,8 +3,9 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
 import time
+from bs4 import BeautifulSoup
+import re
 
 # Function to type text in given element field slowly
 def typeInField(inputElement, text):
@@ -28,7 +29,8 @@ def getElementByID(ID, purposeOfElement):
 
   print(f"✅ Working on {purposeOfElement}...")
 
-  return driver.find_element(By.ID, ID)                # Return the input field
+  # Return the input field
+  return driver.find_element(By.ID, ID)
 
 # Gather the class info before searching
 # courses = input("Enter the courses you wish to enroll in comma-seperated (e.g. CS 219, GEOL 102)\n")
@@ -47,8 +49,9 @@ driver = webdriver.Chrome(service=service)
 driver.get("https://my.unlv.nevada.edu/psp/lvporprd_10/EMPLOYEE/HRMS/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL")
 
 # maybe underneath as a for loop for each course
+# Wait for website to load
 WebDriverWait(driver, 10).until(EC.presence_of_element_located(
-(By.TAG_NAME, "iframe")
+  (By.TAG_NAME, "iframe")
 ))
 
 # Switch to the iframe the input fields are in
@@ -72,5 +75,25 @@ searchBtn = getElementByID(searchBtnID, "search button")
 searchBtn.click()
 
 # Wait for search results
-time.sleep(50)
+time.sleep(10)
 
+# Variables for parsing courses information
+courseID = "^trSSR_CLSRCH_MTG1"
+instructorID = "^MTG_INSTR"
+meetingInfoID = "^MTG_DAYTIME"
+roomID = "^MTG_ROOM"
+
+html_text = driver.page_source
+soup = BeautifulSoup(html_text, "lxml")
+
+# Find the courses by searching for the divs with starting with this class name
+courses = soup.find_all("tr", id=re.compile(courseID))
+
+print("✅ Searching for courses...")
+
+for course in courses:
+  instructor = course.find("span", id=re.compile(instructorID)).text
+  meetingInfo = course.find("span", id=re.compile(meetingInfoID)).text
+  room = course.find("span", id=re.compile(roomID)).text
+
+  print(f"{instructor} {meetingInfo} in {room}")
