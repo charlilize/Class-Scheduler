@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import time
 
-# Function to type text in field slowly
+# Function to type text in given element field slowly
 def typeInField(inputElement, text):
   text = str(text)
 
@@ -16,6 +16,7 @@ def typeInField(inputElement, text):
     inputElement.send_keys(char)
     time.sleep(0.5)
 
+# Function that returns an element with a given ID
 def getElementByID(ID, purposeOfElement):
   # Wait for 5 seconds for the element to exist before crashing program
   try: 
@@ -23,9 +24,9 @@ def getElementByID(ID, purposeOfElement):
       (By.ID, ID)
     ))
   except:
-    print(f"Couldn't enter {purposeOfElement}")
+    print(f"Couldn't work on {purposeOfElement}")
 
-  print(f"✅ Entering {purposeOfElement}..")
+  print(f"✅ Working on {purposeOfElement}...")
 
   return driver.find_element(By.ID, ID)                # Return the input field
 
@@ -37,6 +38,8 @@ subject = "CS"
 courseNumber = 370
 courseNumberFieldID = "SSR_CLSRCH_WRK_CATALOG_NBR$1"
 classSearchFieldID = "SSR_CLSRCH_WRK_SUBJECT$0"
+showOpenClassesCheckboxID = "SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3"
+searchBtnID = "CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH"
 
 service = Service(executable_path="./chromedriver")
 driver = webdriver.Chrome(service=service)
@@ -53,11 +56,21 @@ iframes = driver.find_elements(By.TAG_NAME, "iframe")
 driver.switch_to.frame(iframes[0])
 
 ''' --------- ENTER THE CLASS SUBJECT ---------------- '''
-classInputElement = getElementByID(classSearchFieldID, "class name")                # Get the class input field
-typeInField(classInputElement, subject)                                           # Enter class slowly
+classInputElement = getElementByID(classSearchFieldID, "class name")                # Get the input field
+typeInField(classInputElement, subject)                                             # Enter class slowly
 
 ''' --------- ENTER THE COURSE NUMBER ---------------- '''
-CourseNumInputElement = getElementByID(courseNumberFieldID, "course number")
-typeInField(CourseNumInputElement, courseNumber)
+courseNumInputElement = getElementByID(courseNumberFieldID, "course number")
+typeInField(courseNumInputElement, courseNumber)
 
+# Uncheck the open classes field
+openClassesCheckbox = getElementByID(showOpenClassesCheckboxID, "open classes checkbox")
+openClassesCheckbox.click()
+
+''' --------- SEARCHING FOR CLASSES ---------------- '''
+searchBtn = getElementByID(searchBtnID, "search button")
+searchBtn.click()
+
+# Wait for search results
+time.sleep(50)
 
