@@ -33,12 +33,12 @@ def getElementByID(ID, purposeOfElement):
   return driver.find_element(By.ID, ID)
 
 # Gather the class info before searching
-# courses = input("Enter the courses you wish to enroll in comma-seperated (e.g. CS 219, GEOL 102)\n")
-# courses = [ course.strip() for course in courses.split(",")]     # Remove commas/whitespace
-# courses = [course.split() for course in courses]                 # create pairs : ["COURSE NAME", "COURSE NUMBER"]
+userCourses = input("Enter the courses you wish to enroll in comma-seperated (e.g. CS 219, GEOL 102)\n")
+userCourses = [ course.strip() for course in userCourses.split(",")]     # Remove commas/whitespace
+userCourses = [course.split() for course in userCourses]                 # create pairs : ["COURSE NAME", "COURSE NUMBER"]
 
-subject = "CS"
-courseNumber = 370
+# subject = "CS"
+# courseNumber = 370
 courseNumberFieldID = "SSR_CLSRCH_WRK_CATALOG_NBR$1"
 classSearchFieldID = "SSR_CLSRCH_WRK_SUBJECT$0"
 showOpenClassesCheckboxID = "SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3"
@@ -49,8 +49,7 @@ driver = webdriver.Chrome(service=service)
 
 driver.get("https://my.unlv.nevada.edu/psp/lvporprd_10/EMPLOYEE/HRMS/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL")
 
-# FOR LOOP
-# Wait for main search page to load
+# Switch to the iframe the input fields are in
 try:
   WebDriverWait(driver, 10).until(EC.presence_of_element_located(
     (By.TAG_NAME, "iframe")
@@ -58,54 +57,60 @@ try:
 except:
   print("Couldn't load webpage")
 
-# Switch to the iframe the input fields are in
 iframes = driver.find_elements(By.TAG_NAME, "iframe")
 driver.switch_to.frame(iframes[0])
 
-''' --------- ENTER THE CLASS SUBJECT ---------------- '''
-classInputElement = getElementByID(classSearchFieldID, "class name")                # Get the input field
-typeInField(classInputElement, subject)                                             # Enter class slowly
+# FOR LOOP
+# Wait for main search page to load
+for subject, courseNum in userCourses:
+  print(f"Finding {subject} {courseNum}")
 
-''' --------- ENTER THE COURSE NUMBER ---------------- '''
-courseNumInputElement = getElementByID(courseNumberFieldID, "course number")
-typeInField(courseNumInputElement, courseNumber)
+  ''' --------- ENTER THE CLASS SUBJECT ---------------- '''
+  classInputElement = getElementByID(classSearchFieldID, "class name")                # Get the input field
+  typeInField(classInputElement, subject)                                             # Enter class slowly
 
-# Uncheck the open classes field
-openClassesCheckbox = getElementByID(showOpenClassesCheckboxID, "open classes checkbox")
-openClassesCheckbox.click()
+  ''' --------- ENTER THE COURSE NUMBER ---------------- '''
+  courseNumInputElement = getElementByID(courseNumberFieldID, "course number")
+  typeInField(courseNumInputElement, courseNum)
 
-''' --------- SEARCHING FOR CLASSES ---------------- '''
-searchBtn = getElementByID(searchBtnID, "search button")
-searchBtn.click()
+  # Uncheck the open classes field
+  openClassesCheckbox = getElementByID(showOpenClassesCheckboxID, "open classes checkbox")
+  openClassesCheckbox.click()
 
-# Wait for search results
-time.sleep(10)
+  ''' --------- SEARCHING FOR CLASSES ---------------- '''
+  searchBtn = getElementByID(searchBtnID, "search button")
+  searchBtn.click()
 
-# Variables for parsing courses information
-courseID = "^trSSR_CLSRCH_MTG1"
-instructorID = "^MTG_INSTR"
-meetingInfoID = "^MTG_DAYTIME"
-roomID = "^MTG_ROOM"
-newSearchBtnID = "CLASS_SRCH_WRK2_SSR_PB_NEW_SEARCH$3$"
+  # Wait for search results
+  time.sleep(10)
 
-html_text = driver.page_source
-soup = BeautifulSoup(html_text, "lxml")
+  # Variables for parsing courses information
+  courseID = "^trSSR_CLSRCH_MTG1"
+  instructorID = "^MTG_INSTR"
+  meetingInfoID = "^MTG_DAYTIME"
+  roomID = "^MTG_ROOM"
+  newSearchBtnID = "CLASS_SRCH_WRK2_SSR_PB_NEW_SEARCH$3$"
 
-# Find the courses by searching for the divs with starting with this class name
-courses = soup.find_all("tr", id=re.compile(courseID))
+  html_text = driver.page_source
+  soup = BeautifulSoup(html_text, "lxml")
 
-print("✅ Searching for courses...")
+  # Find the courses by searching for the divs with starting with this class name
+  courses = soup.find_all("tr", id=re.compile(courseID))
 
-for course in courses:
-  instructor = course.find("span", id=re.compile(instructorID)).text
-  meetingInfo = course.find("span", id=re.compile(meetingInfoID)).text
-  room = course.find("span", id=re.compile(roomID)).text
+  print("✅ Searching for courses...")
 
-  print(f"{instructor} {meetingInfo} in {room}")
+  for course in courses:
+    instructor = course.find("span", id=re.compile(instructorID)).text
+    meetingInfo = course.find("span", id=re.compile(meetingInfoID)).text
+    room = course.find("span", id=re.compile(roomID)).text
 
-newSearchBtn = getElementByID(newSearchBtnID, "new search")
-newSearchBtn.click()
+    print(f"{instructor} {meetingInfo} in {room}")
 
-time.sleep(10)
+  newSearchBtn = getElementByID(newSearchBtnID, "new search")
+  newSearchBtn.click()
+
+  time.sleep(10)
+
+print("Done!")
 
 
