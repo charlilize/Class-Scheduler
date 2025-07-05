@@ -20,6 +20,7 @@ instructorID = "^MTG_INSTR"
 meetingInfoID = "^MTG_DAYTIME"
 roomID = "^MTG_ROOM"
 newSearchBtnID = "CLASS_SRCH_WRK2_SSR_PB_NEW_SEARCH$3$"
+statusID = "^win10divDERIVED_CLSRCH_SSR_STATUS_LONG"
 
 ''' FUNCTIONS '''
 # Function to type text in given element field slowly
@@ -58,7 +59,7 @@ driver = webdriver.Chrome(service=service)
 
 driver.get("https://my.unlv.nevada.edu/psp/lvporprd_10/EMPLOYEE/HRMS/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL")
 
-# Switch to the iframe the input fields are in
+# Wait for main search page to load
 try:
   WebDriverWait(driver, 10).until(EC.presence_of_element_located(
     (By.TAG_NAME, "iframe")
@@ -66,11 +67,11 @@ try:
 except:
   print("Couldn't load webpage")
 
+# Switch to the iframe the input fields are in
 iframes = driver.find_elements(By.TAG_NAME, "iframe")
 driver.switch_to.frame(iframes[0])
 
-# FOR LOOP
-# Wait for main search page to load
+# Searching for courses
 for subject, courseNum in userCourses:
   print(f"== Finding {subject} {courseNum} ==")
 
@@ -83,7 +84,7 @@ for subject, courseNum in userCourses:
   typeInField(courseNumInputElement, courseNum)
 
   # Uncheck the open classes field
-  openClassesCheckbox = getElementByID(showOpenClassesCheckboxID, "open classes checkbox")
+  openClassesCheckbox = getElementByID(showOpenClassesCheckboxID, "unchecking open classes checkbox")
   openClassesCheckbox.click()
 
   ''' --------- SEARCHING FOR CLASSES ---------------- '''
@@ -93,20 +94,21 @@ for subject, courseNum in userCourses:
   # Wait for search results
   time.sleep(10)
 
+  print("✅ Searching for courses...\n")
+
   html_text = driver.page_source
   soup = BeautifulSoup(html_text, "lxml")
 
   # Find the courses by searching for the divs with starting with this class name
   courses = soup.find_all("tr", id=re.compile(courseID))
 
-  print("✅ Searching for courses...\n")
-
   for course in courses:
     instructor = course.find("span", id=re.compile(instructorID)).text
     meetingInfo = course.find("span", id=re.compile(meetingInfoID)).text
     room = course.find("span", id=re.compile(roomID)).text
+    status = course.find("div", id=re.compile(statusID)).img["alt"]
 
-    print(f"{instructor} {meetingInfo} in {room}")
+    print(f"{instructor} {meetingInfo} in {room} | {status}")
 
   # Don't click on finding a new search since the button doesn't exist with an unsuccessful search
   if not courses:
