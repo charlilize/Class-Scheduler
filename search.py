@@ -63,7 +63,7 @@ driver.switch_to.frame(iframes[0])
 # FOR LOOP
 # Wait for main search page to load
 for subject, courseNum in userCourses:
-  print(f"Finding {subject} {courseNum}")
+  print(f"== Finding {subject} {courseNum} ==")
 
   ''' --------- ENTER THE CLASS SUBJECT ---------------- '''
   classInputElement = getElementByID(classSearchFieldID, "class name")                # Get the input field
@@ -97,7 +97,7 @@ for subject, courseNum in userCourses:
   # Find the courses by searching for the divs with starting with this class name
   courses = soup.find_all("tr", id=re.compile(courseID))
 
-  print("✅ Searching for courses...")
+  print("✅ Searching for courses...\n")
 
   for course in courses:
     instructor = course.find("span", id=re.compile(instructorID)).text
@@ -106,8 +106,13 @@ for subject, courseNum in userCourses:
 
     print(f"{instructor} {meetingInfo} in {room}")
 
-  newSearchBtn = getElementByID(newSearchBtnID, "new search")
-  newSearchBtn.click()
+  # Don't click on finding a new search since the button doesn't exist with an unsuccessful search
+  if not courses:
+    print("No courses found")
+  else:
+    print("")
+    newSearchBtn = getElementByID(newSearchBtnID, "new search")
+    newSearchBtn.click()
 
   time.sleep(10)
 
