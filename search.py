@@ -7,6 +7,21 @@ import time
 from bs4 import BeautifulSoup
 import re
 
+''' ID INFORMATION '''
+# For main search page
+courseNumberFieldID = "SSR_CLSRCH_WRK_CATALOG_NBR$1"
+classSearchFieldID = "SSR_CLSRCH_WRK_SUBJECT$0"
+showOpenClassesCheckboxID = "SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3"
+searchBtnID = "CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH"
+
+# For list of courses page
+courseID = "^trSSR_CLSRCH_MTG1"
+instructorID = "^MTG_INSTR"
+meetingInfoID = "^MTG_DAYTIME"
+roomID = "^MTG_ROOM"
+newSearchBtnID = "CLASS_SRCH_WRK2_SSR_PB_NEW_SEARCH$3$"
+
+''' FUNCTIONS '''
 # Function to type text in given element field slowly
 def typeInField(inputElement, text):
   text = str(text)
@@ -32,17 +47,11 @@ def getElementByID(ID, purposeOfElement):
   # Return the input field
   return driver.find_element(By.ID, ID)
 
+''' MAIN PROGRAM '''
 # Gather the class info before searching
 userCourses = input("Enter the courses you wish to enroll in comma-seperated (e.g. CS 219, GEOL 102)\n")
 userCourses = [ course.strip() for course in userCourses.split(",")]     # Remove commas/whitespace
 userCourses = [course.split() for course in userCourses]                 # create pairs : ["COURSE NAME", "COURSE NUMBER"]
-
-# subject = "CS"
-# courseNumber = 370
-courseNumberFieldID = "SSR_CLSRCH_WRK_CATALOG_NBR$1"
-classSearchFieldID = "SSR_CLSRCH_WRK_SUBJECT$0"
-showOpenClassesCheckboxID = "SSR_CLSRCH_WRK_SSR_OPEN_ONLY$3"
-searchBtnID = "CLASS_SRCH_WRK2_SSR_PB_CLASS_SRCH"
 
 service = Service(executable_path="./chromedriver")
 driver = webdriver.Chrome(service=service)
@@ -83,13 +92,6 @@ for subject, courseNum in userCourses:
 
   # Wait for search results
   time.sleep(10)
-
-  # Variables for parsing courses information
-  courseID = "^trSSR_CLSRCH_MTG1"
-  instructorID = "^MTG_INSTR"
-  meetingInfoID = "^MTG_DAYTIME"
-  roomID = "^MTG_ROOM"
-  newSearchBtnID = "CLASS_SRCH_WRK2_SSR_PB_NEW_SEARCH$3$"
 
   html_text = driver.page_source
   soup = BeautifulSoup(html_text, "lxml")
