@@ -7,6 +7,17 @@ import time
 from bs4 import BeautifulSoup
 import re
 
+''' TO STORE COURSES FOUND INFO '''
+class ClassSection:
+  def __init__(self):
+    self.course
+    self.status
+    self.time
+    self.professor
+    self.room
+
+week = {}
+
 ''' ID INFORMATION '''
 # For main search page
 courseNumberFieldID = "SSR_CLSRCH_WRK_CATALOG_NBR$1"
@@ -71,7 +82,7 @@ except:
 iframes = driver.find_elements(By.TAG_NAME, "iframe")
 driver.switch_to.frame(iframes[0])
 
-# Searching for courses
+# Search for courses
 for subject, courseNum in userCourses:
   print(f"== Finding {subject} {courseNum} ==")
 
@@ -94,7 +105,7 @@ for subject, courseNum in userCourses:
   # Wait for search results
   time.sleep(10)
 
-  print("✅ Searching for courses...\n")
+  print("✅ Searching for courses...")
 
   html_text = driver.page_source
   soup = BeautifulSoup(html_text, "lxml")
@@ -102,19 +113,25 @@ for subject, courseNum in userCourses:
   # Find the courses by searching for the divs with starting with this class name
   courses = soup.find_all("tr", id=re.compile(courseID))
 
+  if not courses:
+    print("No courses found")
+
   for course in courses:
     instructor = course.find("span", id=re.compile(instructorID)).text
     meetingInfo = course.find("span", id=re.compile(meetingInfoID)).text
     room = course.find("span", id=re.compile(roomID)).text
     status = course.find("div", id=re.compile(statusID)).img["alt"]
 
-    print(f"{instructor} {meetingInfo} in {room} | {status}")
+    # print(f"{instructor} {meetingInfo} in {room} | {status}")
 
-  # Don't click on finding a new search since the button doesn't exist with an unsuccessful search
-  if not courses:
-    print("No courses found")
-  else:
-    print("")
+    # In case meeting info is not available 
+    if meetingInfo == "TBA":
+      days, timeBlock = "TBA", "TBA"
+      
+    # Split meeting info into its days and time at the first space
+    else:
+      days, timeBlock = meetingInfo.split(" ", 1) 
+
     newSearchBtn = getElementByID(newSearchBtnID, "new search")
     newSearchBtn.click()
 
@@ -123,3 +140,11 @@ for subject, courseNum in userCourses:
 print("Done!")
 
 
+'''
+
+week = {
+  MoWe: 
+  TuTh:
+  Fri:
+}
+'''
