@@ -6,17 +6,18 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from bs4 import BeautifulSoup
 import re
+from collections import defaultdict
 
 ''' TO STORE COURSES FOUND INFO '''
 class ClassSection:
-  def __init__(self):
-    self.course
-    self.status
-    self.time
-    self.professor
-    self.room
+  def __init__(self, course, status, time, professor, room):
+    self.course = course
+    self.status = status
+    self.time = time
+    self.professor = professor
+    self.room = room
 
-week = {}
+week = defaultdict(list)
 
 ''' ID INFORMATION '''
 # For main search page
@@ -122,25 +123,36 @@ for subject, courseNum in userCourses:
     room = course.find("span", id=re.compile(roomID)).text
     status = course.find("div", id=re.compile(statusID)).img["alt"]
 
-    # print(f"{instructor} {meetingInfo} in {room} | {status}")
+    print(f"{instructor} {meetingInfo} in {room} | {status}")
 
     # In case meeting info is not available 
     if meetingInfo == "TBA":
       days, timeBlock = "TBA", "TBA"
-      
+
     # Split meeting info into its days and time at the first space
     else:
       days, timeBlock = meetingInfo.split(" ", 1) 
 
-    newSearchBtn = getElementByID(newSearchBtnID, "new search")
-    newSearchBtn.click()
+    # Add to dictionary
+    week[days] = ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room)
 
-  time.sleep(10)
+  newSearchBtn = getElementByID(newSearchBtnID, "new search")
+  newSearchBtn.click()
 
+  time.sleep(5)
+
+print(week)
 print("Done!")
 
 
 '''
+class ClassSection:
+  def __init__(self):
+    self.course
+    self.status
+    self.time
+    self.professor
+    self.room
 
 week = {
   MoWe: 
