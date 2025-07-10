@@ -123,8 +123,6 @@ for subject, courseNum in userCourses:
     room = course.find("span", id=re.compile(roomID)).text
     status = course.find("div", id=re.compile(statusID)).img["alt"]
 
-    print(f"{instructor} {meetingInfo} in {room} | {status}")
-
     # In case meeting info is not available 
     if meetingInfo == "TBA":
       days, timeBlock = "TBA", "TBA"
@@ -134,16 +132,14 @@ for subject, courseNum in userCourses:
       days, timeBlock = meetingInfo.split(" ", 1) 
 
     # Add to dictionary
-    week[days] = ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room)
+    week[days].append(ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room))
 
   newSearchBtn = getElementByID(newSearchBtnID, "new search")
   newSearchBtn.click()
 
   time.sleep(5)
 
-print(week)
 print("Done!")
-
 
 '''
 class ClassSection:
