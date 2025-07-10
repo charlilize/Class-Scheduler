@@ -17,6 +17,7 @@ class ClassSection:
     self.professor = professor
     self.room = room
 
+daysOfTheWeek = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 week = defaultdict(list)
 
 ''' ID INFORMATION '''
@@ -63,96 +64,109 @@ def getElementByID(ID, purposeOfElement):
 ''' MAIN PROGRAM '''
 # Gather the class info before searching
 userCourses = input("Enter the courses you wish to enroll in comma-seperated (e.g. CS 219, GEOL 102)\n")
-userCourses = [ course.strip() for course in userCourses.split(",")]     # Remove commas/whitespace
+userCourses = [course.strip() for course in userCourses.split(",")]     # Remove commas/whitespace
 userCourses = [course.split() for course in userCourses]                 # create pairs : ["COURSE NAME", "COURSE NUMBER"]
 
-service = Service(executable_path="./chromedriver")
-driver = webdriver.Chrome(service=service)
+# Ask for days of the week that would not want classes
+unwantedDays = input("\nEnter days of the week you do not want classes comma-seperated (e.g. Monday, Tuesday)\n")
+unwantedDays = [day.strip().lower() for day in unwantedDays.split(",")]
+filteredDays = []
 
-driver.get("https://my.unlv.nevada.edu/psp/lvporprd_10/EMPLOYEE/HRMS/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL")
+for day in unwantedDays:
+  if day in daysOfTheWeek:
+    filteredDays.append(day)
+  else:
+    print(f"{day} is not a valid day of the week. Removed {day}.")
 
-# Wait for main search page to load
-try:
-  WebDriverWait(driver, 10).until(EC.presence_of_element_located(
-    (By.TAG_NAME, "iframe")
-  ))
-except:
-  print("Couldn't load webpage")
+print(filteredDays)
 
-# Switch to the iframe the input fields are in
-iframes = driver.find_elements(By.TAG_NAME, "iframe")
-driver.switch_to.frame(iframes[0])
+# service = Service(executable_path="./chromedriver")
+# driver = webdriver.Chrome(service=service)
 
-# Search for courses
-for subject, courseNum in userCourses:
-  print(f"== Finding {subject} {courseNum} ==")
+# driver.get("https://my.unlv.nevada.edu/psp/lvporprd_10/EMPLOYEE/HRMS/c/COMMUNITY_ACCESS.CLASS_SEARCH.GBL")
 
-  ''' --------- ENTER THE CLASS SUBJECT ---------------- '''
-  classInputElement = getElementByID(classSearchFieldID, "class name")                # Get the input field
-  typeInField(classInputElement, subject)                                             # Enter class slowly
+# # Wait for main search page to load
+# try:
+#   WebDriverWait(driver, 10).until(EC.presence_of_element_located(
+#     (By.TAG_NAME, "iframe")
+#   ))
+# except:
+#   print("Couldn't load webpage")
 
-  ''' --------- ENTER THE COURSE NUMBER ---------------- '''
-  courseNumInputElement = getElementByID(courseNumberFieldID, "course number")
-  typeInField(courseNumInputElement, courseNum)
+# # Switch to the iframe the input fields are in
+# iframes = driver.find_elements(By.TAG_NAME, "iframe")
+# driver.switch_to.frame(iframes[0])
 
-  # Uncheck the open classes field
-  openClassesCheckbox = getElementByID(showOpenClassesCheckboxID, "unchecking open classes checkbox")
-  openClassesCheckbox.click()
+# # Search for courses
+# for subject, courseNum in userCourses:
+#   print(f"== Finding {subject} {courseNum} ==")
 
-  ''' --------- SEARCHING FOR CLASSES ---------------- '''
-  searchBtn = getElementByID(searchBtnID, "search button")
-  searchBtn.click()
+#   ''' --------- ENTER THE CLASS SUBJECT ---------------- '''
+#   classInputElement = getElementByID(classSearchFieldID, "class name")                # Get the input field
+#   typeInField(classInputElement, subject)                                             # Enter class slowly
 
-  # Wait for search results
-  time.sleep(10)
+#   ''' --------- ENTER THE COURSE NUMBER ---------------- '''
+#   courseNumInputElement = getElementByID(courseNumberFieldID, "course number")
+#   typeInField(courseNumInputElement, courseNum)
 
-  print("✅ Searching for courses...")
+#   # Uncheck the open classes field
+#   openClassesCheckbox = getElementByID(showOpenClassesCheckboxID, "unchecking open classes checkbox")
+#   openClassesCheckbox.click()
 
-  html_text = driver.page_source
-  soup = BeautifulSoup(html_text, "lxml")
+#   ''' --------- SEARCHING FOR CLASSES ---------------- '''
+#   searchBtn = getElementByID(searchBtnID, "search button")
+#   searchBtn.click()
 
-  # Find the courses by searching for the divs with starting with this class name
-  courses = soup.find_all("tr", id=re.compile(courseID))
+#   # Wait for search results
+#   time.sleep(10)
 
-  if not courses:
-    print("No courses found")
+#   print("✅ Searching for courses...")
 
-  for course in courses:
-    instructor = course.find("span", id=re.compile(instructorID)).text
-    meetingInfo = course.find("span", id=re.compile(meetingInfoID)).text
-    room = course.find("span", id=re.compile(roomID)).text
-    status = course.find("div", id=re.compile(statusID)).img["alt"]
+#   html_text = driver.page_source
+#   soup = BeautifulSoup(html_text, "lxml")
 
-    # In case meeting info is not available 
-    if meetingInfo == "TBA":
-      days, timeBlock = "TBA", "TBA"
+#   # Find the courses by searching for the divs with starting with this class name
+#   courses = soup.find_all("tr", id=re.compile(courseID))
 
-    # Split meeting info into its days and time at the first space
-    else:
-      days, timeBlock = meetingInfo.split(" ", 1) 
+#   if not courses:
+#     print("No courses found")
 
-    # Add to dictionary
-    week[days].append(ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room))
+#   for course in courses:
+#     instructor = course.find("span", id=re.compile(instructorID)).text
+#     meetingInfo = course.find("span", id=re.compile(meetingInfoID)).text
+#     room = course.find("span", id=re.compile(roomID)).text
+#     status = course.find("div", id=re.compile(statusID)).img["alt"]
 
-  newSearchBtn = getElementByID(newSearchBtnID, "new search")
-  newSearchBtn.click()
+#     # In case meeting info is not available 
+#     if meetingInfo == "TBA":
+#       days, timeBlock = "TBA", "TBA"
 
-  time.sleep(5)
+#     # Split meeting info into its days and time at the first space
+#     else:
+#       days, timeBlock = meetingInfo.split(" ", 1) 
 
-print("Done!")
+#     # Add to dictionary
+#     week[days].append(ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room))
 
-'''
-class ClassSection:
-  def __init__(self):
-    self.course
-    self.status
-    self.time
-    self.professor
-    self.room
+#   newSearchBtn = getElementByID(newSearchBtnID, "new search")
+#   newSearchBtn.click()
 
-week = {
-  MoWe: 
-  TuTh:
-  Fri:
-}
-'''
+#   time.sleep(5)
+
+# print("Done!")
+
+# '''
+# class ClassSection:
+#   def __init__(self):
+#     self.course
+#     self.status
+#     self.time
+#     self.professor
+#     self.room
+
+# week = {
+#   MoWe: 
+#   TuTh:
+#   Fri:
+# }
+# '''
