@@ -125,10 +125,10 @@ for subject, courseNum in userCourses:
   searchBtn = getElementByID(searchBtnID, "search button")
   searchBtn.click()
 
+  print("✅ Searching for courses...")
+
   # Wait for search results
   time.sleep(10)
-
-  print("✅ Searching for courses...")
 
   html_text = driver.page_source
   soup = BeautifulSoup(html_text, "lxml")
@@ -138,37 +138,40 @@ for subject, courseNum in userCourses:
 
   if not courses:
     print("No courses found")
+  else:  
+    for course in courses:
+      instructor = course.find("span", id=re.compile(instructorID)).text
+      meetingInfo = course.find("span", id=re.compile(meetingInfoID)).text
+      room = course.find("span", id=re.compile(roomID)).text
+      status = course.find("div", id=re.compile(statusID)).img["alt"]
 
-  for course in courses:
-    instructor = course.find("span", id=re.compile(instructorID)).text
-    meetingInfo = course.find("span", id=re.compile(meetingInfoID)).text
-    room = course.find("span", id=re.compile(roomID)).text
-    status = course.find("div", id=re.compile(statusID)).img["alt"]
+      # In case meeting info is not available 
+      if meetingInfo == "TBA":
+        days, timeBlock = "TBA", "TBA"
 
-    # In case meeting info is not available 
-    if meetingInfo == "TBA":
-      days, timeBlock = "TBA", "TBA"
+      # Split meeting info into its days and time at the first space
+      else:
+        days, timeBlock = meetingInfo.split(" ", 1) 
 
-    # Split meeting info into its days and time at the first space
-    else:
-      days, timeBlock = meetingInfo.split(" ", 1) 
+      # Add to dictionary
+      week[days].append(ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room))
 
-    # Add to dictionary
-    week[days].append(ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room))
+    newSearchBtn = getElementByID(newSearchBtnID, "new search")
+    newSearchBtn.click()
 
-  newSearchBtn = getElementByID(newSearchBtnID, "new search")
-  newSearchBtn.click()
-
-  time.sleep(5)
+    time.sleep(5)
 
 # Output in file all the available sections for each user course
-for course in userCourses:             # [["CS", "219"], ["CS", "302"]]
-  fullCourseName = course[0] + " " + course[1]
-  print(f"\nAll sections for {fullCourseName}:") 
-  for dayKey in week:                  # ["MoWe", "TuTh"]
-    for section in week[dayKey]:       # [ClassSection(), ClassSection()]
-      if section.course == fullCourseName:    
-            print(f"{dayKey}: {section.professor} {section.time} in {section.room} | {section.status}")
+with open("output.txt", "w") as file:
+  file.write("***************** SCHEDULE BUILDER *****************\n")
+
+  for course in userCourses:             # [["CS", "219"], ["CS", "302"]]
+    fullCourseName = course[0] + " " + course[1]
+    file.write(f"\n=== All Sections for {fullCourseName.upper()}: ===\n") 
+    for dayKey in week:                  # ["MoWe", "TuTh"]
+      for section in week[dayKey]:       # [ClassSection(), ClassSection()]
+        if section.course == fullCourseName:    
+              file.write(f"{dayKey}: {section.professor} {section.time} in {section.room} | {section.status} \n")
 
 
 
