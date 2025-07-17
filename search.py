@@ -17,12 +17,13 @@ from collections import defaultdict
 # }
 
 class ClassSection:
-  def __init__(self, course, status, time, professor, room):
+  def __init__(self, course, status, time, professor, room, days):
     self.course = course
     self.status = status
     self.time = time
     self.professor = professor
     self.room = room
+    self.days = days
 
 week = defaultdict(list)
 daysOfTheWeek = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
@@ -77,14 +78,14 @@ userCourses = [course.split() for course in userCourses]                 # creat
 # Ask for days of the week that would not want classes
 unwantedDays = input("\nEnter days of the week you do not want classes comma-seperated (e.g. Monday, Tuesday). Enter if any day is fine.\n")
 unwantedDays = [day.strip().lower() for day in unwantedDays.split(",")]
-filteredDays = []
+filteredUnwantedDays = []
 
 # Input validation
 for day in unwantedDays:
   if day == "":
     break
   if day in daysOfTheWeek:
-    filteredDays.append(day)
+    filteredUnwantedDays.append(day)
   else:
     print(f"{day} is not a valid day of the week. Removed {day}.")
 
@@ -154,7 +155,7 @@ for subject, courseNum in userCourses:
         days, timeBlock = meetingInfo.split(" ", 1) 
 
       # Add to dictionary
-      week[days].append(ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room))
+      week[days].append(ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room, days))
 
     newSearchBtn = getElementByID(newSearchBtnID, "new search")
     newSearchBtn.click()
@@ -174,6 +175,36 @@ with open("output.txt", "w") as file:
               file.write(f"{dayKey}: {section.professor} {section.time} in {section.room} | {section.status} \n")
 
 
+''' Create all combinations of a schedule containing one of each desired course '''
+
+# All the available sections in a 1D array for easy iteration
+sections = [section for sectionsInDay in week.values() for section in sectionsInDay]
+print("Length of schedules: ", len(sections))
+
+schedules = []      # each element is a schedule list
+tmpSchedule = []       # temp array to build a schedule
+
+for i in range(len(sections)):
+  tmpSchedule = []
+  tmpSchedule.append(sections[i])
+
+  for j in range(i + 1, len(sections)):
+
+    # Add the section in the schedule if not already
+    if not any(existingSection.course == sections[j].course for existingSection in tmpSchedule):
+      tmpSchedule.append(sections[j])
+
+  # Only add schedule if it contains all the desired courses
+  if len(tmpSchedule) == len(userCourses):
+    schedules.append(tmpSchedule)
+
+# printing schedules
+for i, schedule in enumerate(schedules):
+  print(f"SCHEDULE {i + 1}")
+  for section in schedule:
+    print(f"{section.course}: {section.professor} {section.time} in {section.room} | {section.status} \n")
+
+print("Length of schedules after: ", len(schedules))
 
 '''
 class ClassSection:
@@ -184,7 +215,7 @@ class ClassSection:
     self.professor
     self.room
 
-week = {
+sections = {
   MoWe: [ClassSection("CS 219"), ClassSection("CS 302")]
   TuTh: []
   Fri: [ClassSection("CS 219")]
