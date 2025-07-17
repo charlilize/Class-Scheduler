@@ -7,6 +7,7 @@ import time
 from bs4 import BeautifulSoup
 import re
 from collections import defaultdict
+from itertools import product
 
 ''' TO STORE COURSES FOUND INFO '''
 # Example:
@@ -162,51 +163,42 @@ for subject, courseNum in userCourses:
 
     time.sleep(5)
 
+with open("output.txt", "w") as file:
+    file.write("Test line\n")  # <- add this
+
+
+# Store each courses' sections in its own list
+coursesList = [[] for _ in range(len(userCourses))] # 2D array, where element[i] is all the sections for a specific course
+
 # Output in file all the available sections for each user course
 with open("output.txt", "w") as file:
   file.write("***************** SCHEDULE BUILDER *****************\n")
 
-  for course in userCourses:             # [["CS", "219"], ["CS", "302"]]
+  for i, course in enumerate(userCourses):             # [["CS", "219"], ["CS", "302"]]
     fullCourseName = course[0] + " " + course[1]
     file.write(f"\n=== All Sections for {fullCourseName.upper()}: ===\n") 
     for dayKey in week:                  # ["MoWe", "TuTh"]
       for section in week[dayKey]:       # [ClassSection(), ClassSection()]
         if section.course == fullCourseName:    
-              file.write(f"{dayKey}: {section.professor} {section.time} in {section.room} | {section.status} \n")
+          file.write(f"{dayKey}: {section.professor} {section.time} in {section.room} | {section.status} \n")
+          coursesList[i].append(section)
 
+# Create different combinations of the courses
+tupleSchedules = list(product(*coursesList))
+schedules = [list(tupl) for tupl in tupleSchedules]   # Convert to lists
 
-''' Create all combinations of a schedule containing one of each desired course '''
+print(len(schedules))
 
-# All the available sections in a 1D array for easy iteration
-sections = [section for sectionsInDay in week.values() for section in sectionsInDay]
-print("Length of schedules: ", len(sections))
+for i, sched in enumerate(schedules):
+  print("")
+  print(f"Schedule {i + 1}: ")
+  for section in sched:
+    print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
 
-schedules = []      # each element is a schedule list
-tmpSchedule = []       # temp array to build a schedule
-
-for i in range(len(sections)):
-  tmpSchedule = []
-  tmpSchedule.append(sections[i])
-
-  for j in range(i + 1, len(sections)):
-
-    # Add the section in the schedule if not already
-    if not any(existingSection.course == sections[j].course for existingSection in tmpSchedule):
-      tmpSchedule.append(sections[j])
-
-  # Only add schedule if it contains all the desired courses
-  if len(tmpSchedule) == len(userCourses):
-    schedules.append(tmpSchedule)
-
-# printing schedules
-for i, schedule in enumerate(schedules):
-  print(f"SCHEDULE {i + 1}")
-  for section in schedule:
-    print(f"{section.course}: {section.professor} {section.time} in {section.room} | {section.status} \n")
-
-print("Length of schedules after: ", len(schedules))
 
 '''
+
+
 class ClassSection:
   def __init__(self):
     self.course

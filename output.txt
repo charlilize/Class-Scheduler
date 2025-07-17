@@ -1,10 +1,17 @@
 ***************** SCHEDULE BUILDER *****************
 
-=== All Sections for CS 370: ===
-MoWe: Venkata Prashant Modekurthy 11:30AM - 12:45PM in GUA 3217 | Closed 
-MoWe: Chuck Tessler 2:30PM - 3:45PM in CEB 218 | Open 
-TuTh: Benjamin Cisneros Merino 1:00PM - 2:15PM in BEH 104 | Open 
+=== All Sections for CS 302: ===
+MoWe: James Andro-Vasko 4:00PM - 5:15PM in HFA 257 | Wait List 
+MoWe: Staff 1:00PM - 2:15PM in TBE B-176 | Open 
+MoWe: Staff 11:30AM - 12:45PM in GUA 2212 | Open 
+TuTh: James Andro-Vasko 5:30PM - 6:45PM in TBE B-176 | Open 
+TuTh: Shaikh Arifuzzaman 1:00PM - 2:15PM in BEH 121 | Open 
 
-=== All Sections for CS 326: ===
-MoWe: Benjamin Cisneros Merino 10:00AM - 11:15AM in WRI C144 | Open 
-TuTh: Andreas Stefik 10:00AM - 11:15AM in HFA 257 | Wait List 
+=== All Sections for CS 219: ===
+MoWe: Sam Black 8:30AM - 9:45AM in BEH 107 | Wait List 
+TuTh: Kishore Konda Chidella 10:00AM - 11:15AM in Web live | Open 
+TuTh: Kishore Konda Chidella 1:00PM - 2:15PM in BEH 113 | Open 
+
+=== All Sections for GRC 380: ===
+MoWe: Ryan Almazan 5:30PM - 8:15PM in Web live | Open 
+TuTh: Ashley Doughty 8:30AM - 11:15AM in GRA 239B | Open 

@@ -25,35 +25,15 @@ week = {
 
 userCourses = 2
 
+# ERROR WITH HAVING >= 2 COURSES
+
 # Create all combinations of a schedule containing one of each desired course
 
 # All the available sections in a 1D array for easy iteration
-sections = [section for sectionsInDay in week.values() for section in sectionsInDay]
+'''
+loop through each userCourses
+  store fullCourse name
+  loop throuch the values in the week hashmap
 
-schedules = []      # each element is a schedule list
-tmpSchedule = []       # temp array to build a schedule
+'''
 
-for i in range(len(sections)):
-
-  tmpSchedule = []
-  tmpSchedule.append(sections[i])
-
-  for j in range(i + 1, len(sections)):
-
-    # Add the section in the schedule if not already
-    if not any(existingSection.course == sections[j].course for existingSection in tmpSchedule):
-      tmpSchedule.append(sections[j])
-
-    # Only add schedule if it contains all the desired courses
-    if len(tmpSchedule) == userCourses:
-
-      schedules.append(tmpSchedule[:]) # shallow copy of schedule
-
-      # Remove to prepare for other possible combinations
-      tmpSchedule.pop(-1)
-
-# printing schedules
-for i, schedule in enumerate(schedules):
-  print(f"SCHEDULE {i + 1}")
-  for section in schedule:
-    print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
