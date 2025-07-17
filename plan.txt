@@ -2,39 +2,10 @@
 ''' 
 1. figure out how to create a schedule
 A schedule is valid if:
-* contains one section of every course in userCourses
-  - schedules = [[ClassSection(), ClassSection()],...] 
-  
-
-schedules = [[ClassSection(), ClassSection()],...] 
-schedule = [ClassSection("CS 219"), ClassSection("CS 302"), [ClassSection("CS 219")]
-week = {
-  MoWe: [ClassSection("CS 219"), ClassSection("CS 302")]
-  TuTh: [ClassSection("CS 302")]
-  Fri: [ClassSection("CS 219")]
-}
-
-sections =  [ClassSection("CS 219"), ClassSection("CS 302"), ClassSection("GEOL") ClassSection("CS 302"), ClassSection("CS 219")]
-                                                                                        i                                j
-
-schedule = []
-schedules = [[ClassSection("CS 219"), ClassSection("CS 302")]]
-              
-flatten the week and call it sections
-create a temp schedule list
-create a schedules array 
-for i in range(len(sections))
-  schedule = []
-  schedule.append(sections[i])
-  for j in range(i + 1, len(sections))
-    if not any(existingSection.course == section[j].course for existingSection in schedule):
-      schedule.append(sections[j])
-  if len(schedule) == len(userCourses):
-    append the schedule to schedules
-
+* contains one section of every course in userCourses  ✅
 
 * no section's time conflicts with the other (must be at least 15 minutes in between each section) 
-  - toMilitaryTime function => convert to military time for easy comparison
+  - int toMilitaryTime function => convert to a single time to military time
   - boolean checkOverlap function => make sure that the end of the first class + 15 is less than the start of the second class 
 
 2. figure out how to filter according to days unwanted 

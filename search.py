@@ -163,10 +163,6 @@ for subject, courseNum in userCourses:
 
     time.sleep(5)
 
-with open("output.txt", "w") as file:
-    file.write("Test line\n")  # <- add this
-
-
 # Store each courses' sections in its own list
 coursesList = [[] for _ in range(len(userCourses))] # 2D array, where element[i] is all the sections for a specific course
 
@@ -196,8 +192,9 @@ for i, sched in enumerate(schedules):
     print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
 
 
-'''
 
+
+'''
 
 class ClassSection:
   def __init__(self):
