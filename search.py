@@ -70,6 +70,50 @@ def getElementByID(ID, purposeOfElement):
   # Return the input field
   return driver.find_element(By.ID, ID)
 
+# Takes in a string: "10:00PM" and returns the military time: 2200
+def convertToMilitaryTime(time):
+  
+  hour, minutes = [part.strip() for part in time.split(":")]  # Remove colon
+
+  # If the time is PM or is during 12AM, convert it
+  if "PM" in time or ("12" in time and "AM" in time):          
+    # Edge case where 12PM doesn't need to be converted 
+    if not ("12" in time and "PM" in time):
+      hour = int(hour)
+      hour += 12
+
+      # Reset back to 0 if at 24 mark
+      if hour == 24:
+        hour = 0
+
+      hour = str(hour)
+
+  time = hour + minutes
+  time = time[:-2]                                            # Remove AM/PM
+
+  return int(time)  
+
+# Takes in two classes and returns True if the sections have conflicting times
+def isOverlapping(section1, section2):
+
+  # Edge case if they're on different days
+  if section1.days != section2.days:
+    return False
+  
+  # Edge case if one of the section's days are unknown
+  if section1.days == "TBA" or section2.days == "TBA":
+    return False
+  
+  # Convert the sections' time range to military time
+  section1Times = [part.strip() for part in section1.time.split("-")]
+  section2Times = [part.strip() for part in section2.time.split("-")]
+  startSection1, endSection1 = convertToMilitaryTime(section1Times[0]), convertToMilitaryTime(section1Times[1])
+  startSection2, endSection2 = convertToMilitaryTime(section2Times[0]), convertToMilitaryTime(section2Times[1])
+
+  # Make sure that the end of the first class + 15 is less than the start of the second class 
+  return not (endSection1 + 15 <= startSection2 or endSection2 + 15 <= startSection1)
+
+
 ''' MAIN PROGRAM '''
 # Gather the class info before searching
 userCourses = input("Enter the courses you wish to enroll in comma-seperated (e.g. CS 219, GEOL 102)\n")
@@ -183,19 +227,38 @@ with open("output.txt", "w") as file:
 tupleSchedules = list(product(*coursesList))
 schedules = [list(tupl) for tupl in tupleSchedules]   # Convert to lists
 
-print(len(schedules))
+print("total schedules: ", len(schedules))
+validSchedules = []
 
-for i, sched in enumerate(schedules):
-  print("")
-  print(f"Schedule {i + 1}: ")
-  for section in sched:
-    print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
+# Debugging (prints all the schedule combinations)
+# for i, sched in enumerate(schedules):
+#   print("")
+#   print(f"Schedule {i + 1}: ")
+#   for section in sched:
+#     print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
 
-
+# Go through 2D array of schedules (each index is a list of a possible schedule)
+for k, sched in enumerate(schedules):
+  # Check for all combinations of the classes to see if there's a conflict
+  validSched = True
+  for i in range(len(sched)):
+    for j in range(i + 1, len(sched)):
+      if isOverlapping(sched[i], sched[j]):
+        validSched = False
+  # if no overlapping sections, add it to valid schedules
+  if validSched:
+    validSchedules.append(sched)
+    
+# Debugging (prints all the schedules that don't have time conflicts)
+# print("total valid schedules: ", len(validSchedules))
+# for i, sched in enumerate(validSchedules):
+#   print("")
+#   print(f"Schedule {i + 1}: ")
+#   for section in sched:
+#     print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
 
 
 '''
-
 class ClassSection:
   def __init__(self):
     self.course

@@ -55,10 +55,6 @@ schedule = [
     ClassSection("CS 302", "Open", "1:00PM - 2:15PM", "Staff", "TBE B-176", "MoWe"),
     ClassSection("CS 302", "Open", "11:30AM - 12:45PM", "Staff", "GUA 2212", "MoWe"),
     ClassSection("CS 302", "Open", "5:30PM - 6:45PM", "James Andro-Vasko", "TBE B-176", "TuTh"),
-    ClassSection("CS 302", "Open", "1:00PM - 2:15PM", "Shaikh Arifuzzaman", "BEH 121", "TuTh"),
-    ClassSection("CS 219", "Wait List", "8:30AM - 9:45AM", "Sam Black", "BEH 107", "MoWe"),
-    ClassSection("CS 219", "Open", "10:00AM - 11:15AM", "Kishore Konda Chidella", "Web live", "TuTh"), # 6
-    ClassSection("CS 219", "Open", "1:00PM - 2:15PM", "Kishore Konda Chidella", "BEH 113", "TuTh"),
-    ClassSection("GRC 380", "Open", "5:30PM - 8:15PM", "Ryan Almazan", "Web live", "MoWe"),
-    ClassSection("GRC 380", "Open", "8:30AM - 11:15AM", "Ashley Doughty", "GRA 239B", "TuTh"), # 9
 ]
+
+print()
