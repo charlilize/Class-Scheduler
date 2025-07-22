@@ -45,6 +45,23 @@ newSearchBtnID = "CLASS_SRCH_WRK2_SSR_PB_NEW_SEARCH$3$"
 statusID = "^win10divDERIVED_CLSRCH_SSR_STATUS_LONG"
 
 ''' FUNCTIONS '''
+# Abbreviates day of the week to the format of the website
+def abbreviateDay(day):
+  if day == "monday":
+    return "Mo"
+  elif day == "tuesday":
+    return "Tu"
+  elif day == "wednesday":
+    return "We"
+  elif day == "thursday":
+    return "Th"
+  elif day == "friday":
+    return "Fr"
+  elif day == "saturday":
+    return "Sa"
+  else:
+    return "Su"
+
 # Function to type text in given element field slowly
 def typeInField(inputElement, text):
   text = str(text)
@@ -127,11 +144,9 @@ filteredUnwantedDays = []
 
 # Input validation
 for day in unwantedDays:
-  if day == "":
-    break
   if day in daysOfTheWeek:
-    filteredUnwantedDays.append(day)
-  else:
+    filteredUnwantedDays.append(abbreviateDay(day))
+  elif not unwantedDays:
     print(f"{day} is not a valid day of the week. Removed {day}.")
 
 service = Service(executable_path="./chromedriver")
@@ -226,8 +241,6 @@ with open("output.txt", "w") as file:
 # Create different combinations of the courses
 tupleSchedules = list(product(*coursesList))
 schedules = [list(tupl) for tupl in tupleSchedules]   # Convert to lists
-
-print("total schedules: ", len(schedules))
 validSchedules = []
 
 # Debugging (prints all the schedule combinations)
@@ -257,8 +270,26 @@ for k, sched in enumerate(schedules):
 #   for section in sched:
 #     print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
 
+# Filter out schedules that are on unwanted days of the week, if there are any
+# if filteredUnwantedDays:
+
+
 
 '''
+could possibly get rid of the week structure, don't need it 
+
+
+
+- filter through valid schedules
+- create an array called preferredDaysSchedules
+- loop through each validSchedules
+-   onPreferredDays = True
+-   loop through each section in sched
+-     loop through filtered unwanted days
+-       if current day in filteredUnWantedDays is in section.days
+-         onPreferredDays = False
+-   if onPreferredDays, preferredDaysSchedules.append(sched)
+
 class ClassSection:
   def __init__(self):
     self.course

@@ -3,12 +3,9 @@
 1. figure out how to create a schedule
 A schedule is valid if:
 * contains one section of every course in userCourses  ✅
-
-* no section's time conflicts with the other (must be at least 15 minutes in between each section) 
-  - int toMilitaryTime function => convert to a single time to military time
-  - boolean checkOverlap function => make sure that the end of the first class + 15 is less than the start of the second class 
+* no section's time conflicts with the other (must be at least 15 minutes in between each section)   ✅
 
 2. figure out how to filter according to days unwanted 
-* follows a valid schedule AND
+* follows a valid schedule AND ✅
 * creates a schedule, if possible, that doesn't take place on filteredUnwantedDays
 '''
