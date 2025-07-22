@@ -10,13 +10,6 @@ from collections import defaultdict
 from itertools import product
 
 ''' TO STORE COURSES FOUND INFO '''
-# Example:
-# week = {
-#   MoWe: [ClassSection(), ClassSection()]
-#   TuTh:[]
-#   Fri: [ClassSection()]
-# }
-
 class ClassSection:
   def __init__(self, course, status, time, professor, room, days):
     self.course = course
@@ -26,7 +19,7 @@ class ClassSection:
     self.room = room
     self.days = days
 
-week = defaultdict(list)
+allSections = []
 daysOfTheWeek = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 
 ''' ID INFORMATION '''
@@ -138,16 +131,18 @@ userCourses = [course.strip() for course in userCourses.split(",")]     # Remove
 userCourses = [course.split() for course in userCourses]                 # create pairs : ["COURSE NAME", "COURSE NUMBER"]
 
 # Ask for days of the week that would not want classes
-unwantedDays = input("\nEnter days of the week you do not want classes comma-seperated (e.g. Monday, Tuesday). Enter if any day is fine.\n")
-unwantedDays = [day.strip().lower() for day in unwantedDays.split(",")]
-filteredUnwantedDays = []
+rawUnwantedDays = input("\nEnter days of the week you do not want classes comma-seperated (e.g. Monday, Tuesday). Enter if any day is fine.\n")
+rawUnwantedDays = [day.strip().lower() for day in rawUnwantedDays.split(",")]
+unwantedDays = []
 
 # Input validation
-for day in unwantedDays:
+for day in rawUnwantedDays:
   if day in daysOfTheWeek:
-    filteredUnwantedDays.append(abbreviateDay(day))
-  elif not unwantedDays:
+    unwantedDays.append(abbreviateDay(day))
+  elif not rawUnwantedDays:
     print(f"{day} is not a valid day of the week. Removed {day}.")
+
+print(unwantedDays)
 
 service = Service(executable_path="./chromedriver")
 driver = webdriver.Chrome(service=service)
@@ -214,29 +209,28 @@ for subject, courseNum in userCourses:
       else:
         days, timeBlock = meetingInfo.split(" ", 1) 
 
-      # Add to dictionary
-      week[days].append(ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room, days))
+      # Add to list
+      allSections.append(ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room, days))
 
     newSearchBtn = getElementByID(newSearchBtnID, "new search")
     newSearchBtn.click()
 
     time.sleep(5)
 
-# Store each courses' sections in its own list
-coursesList = [[] for _ in range(len(userCourses))] # 2D array, where element[i] is all the sections for a specific course
+# 2D array, where element[i] is all the sections for a specific course
+coursesList = [[] for _ in range(len(userCourses))] 
 
 # Output in file all the available sections for each user course
 with open("output.txt", "w") as file:
   file.write("***************** SCHEDULE BUILDER *****************\n")
 
-  for i, course in enumerate(userCourses):             # [["CS", "219"], ["CS", "302"]]
+  for i, course in enumerate(userCourses):            
     fullCourseName = course[0] + " " + course[1]
     file.write(f"\n=== All Sections for {fullCourseName.upper()}: ===\n") 
-    for dayKey in week:                  # ["MoWe", "TuTh"]
-      for section in week[dayKey]:       # [ClassSection(), ClassSection()]
-        if section.course == fullCourseName:    
-          file.write(f"{dayKey}: {section.professor} {section.time} in {section.room} | {section.status} \n")
-          coursesList[i].append(section)
+    for section in allSections:       # [ClassSection(), ClassSection()]
+      if section.course == fullCourseName:    
+        file.write(f"{section.days}: {section.professor} {section.time} in {section.room} | {section.status} \n")
+        coursesList[i].append(section)
 
 # Create different combinations of the courses
 tupleSchedules = list(product(*coursesList))
@@ -271,24 +265,21 @@ for k, sched in enumerate(schedules):
 #     print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
 
 # Filter out schedules that are on unwanted days of the week, if there are any
-# if filteredUnwantedDays:
+# if unwantedDays:
 
 
 
 '''
-could possibly get rid of the week structure, don't need it 
-
-
 
 - filter through valid schedules
-- create an array called preferredDaysSchedules
+- create an array called preferredDaysSchedules, notOnPreferredDaysSchedules
 - loop through each validSchedules
 -   onPreferredDays = True
 -   loop through each section in sched
 -     loop through filtered unwanted days
--       if current day in filteredUnWantedDays is in section.days
+-       if current day in unwantedDays is in section.days
 -         onPreferredDays = False
--   if onPreferredDays, preferredDaysSchedules.append(sched)
+-   if onPreferredDays, preferredDaysSchedules.append(sched), else append to notOnPreferredDaysSchedules
 
 class ClassSection:
   def __init__(self):

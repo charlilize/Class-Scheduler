@@ -1,11 +1,13 @@
 ***************** SCHEDULE BUILDER *****************
 
-=== All Sections for GRC 365: ===
-MoWe: Kayla Lockwood 11:30AM - 2:15PM in GRA 239A | Wait List 
-TBA: Richard Adams TBA in Web-based | Closed 
-TBA: Richard Adams TBA in Web-based | Open 
+=== All Sections for CS 219: ===
+TuTh: Kishore Konda Chidella 10:00AM - 11:15AM in Web live | Open 
+TuTh: Kishore Konda Chidella 1:00PM - 2:15PM in BEH 113 | Open 
+MoWe: Sam Black 8:30AM - 9:45AM in BEH 107 | Wait List 
 
-=== All Sections for ART 266: ===
-TBA: Anna Vishnevsky TBA in Web-based | Wait List 
-TBA: Aya Mcdonald TBA in Web-based | Open 
-TBA: Aya Mcdonald TBA in Web-based | Open 
+=== All Sections for GEOL 102: ===
+TuTh: Ganqing Jiang 2:30PM - 3:45PM in WRI C148 | Open 
+Mo: Staff 5:30PM - 8:15PM in LFG 105 | Open 
+We: Staff 5:30PM - 8:15PM in LFG 105 | Open 
+Fr: Staff 8:30AM - 11:15AM in LFG 105 | Open 
+Fr: Staff 1:00PM - 3:45PM in LFG 105 | Open 

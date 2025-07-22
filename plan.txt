@@ -8,4 +8,8 @@ A schedule is valid if:
 2. figure out how to filter according to days unwanted 
 * follows a valid schedule AND ✅
 * creates a schedule, if possible, that doesn't take place on filteredUnwantedDays
+
+other tasks:
+- could possibly get rid of the week structure, don't need it 
+- make it print the schedules on wanted days then do an option to display schedules that are not on wanted days
 '''
