@@ -233,14 +233,7 @@ with open("output.txt", "w") as file:
 # Create different combinations of the courses
 tupleSchedules = list(product(*coursesList))
 schedules = [list(tupl) for tupl in tupleSchedules]   # Convert to lists
-validSchedules = []
-
-# Debugging (prints all the schedule combinations)
-# for i, sched in enumerate(schedules):
-#   print("")
-#   print(f"Schedule {i + 1}: ")
-#   for section in sched:
-#     print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
+validSchedules = [] # Schedules without time conflicts
 
 # Go through 2D array of schedules (each index is a list of a possible schedule)
 for k, sched in enumerate(schedules):
@@ -253,23 +246,44 @@ for k, sched in enumerate(schedules):
   # if no overlapping sections, add it to valid schedules
   if validSched:
     validSchedules.append(sched)
-    
-# Debugging (prints all the schedules that don't have time conflicts)
-# print("total valid schedules: ", len(validSchedules))
-# for i, sched in enumerate(validSchedules):
-#   print("")
-#   print(f"Schedule {i + 1}: ")
-#   for section in sched:
-#     print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
 
 # Filter out schedules that are on unwanted days of the week, if there are any
 preferredDaysSchedules, notOnPreferredDaysSchedules = [], []
 
-# if unwantedDays:
-#   for i, sched in enumerate(validSchedules):
-#     onPreferredDays = True
-#     for section in sched:
-#       for day in unwantedDays:
+print("VALID SCHEDULES: ", len(validSchedules))
+
+if unwantedDays:
+  for i, sched in enumerate(validSchedules):
+    onPreferredDays = True
+    for section in sched:
+      for day in unwantedDays:
+        if day in section.days:
+          onPreferredDays = False
+    if onPreferredDays:
+      preferredDaysSchedules.append(sched)
+    else:
+      notOnPreferredDaysSchedules.append(sched)
+# No need to filter if there's no schedule limitations
+else: 
+  preferredDaysSchedules = validSchedules
+
+
+# Debugging (prints all the schedules that don't have time conflicts)
+print("preferredDaysSchedules:", len(preferredDaysSchedules))
+for i, sched in enumerate(preferredDaysSchedules):
+  print("")
+  print(f"Schedule {i + 1}: ")
+  for section in sched:
+    print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
+
+
+# Debugging (prints all the schedules that don't have time conflicts)
+print("notpreferredDaysSchedules:", len(notOnPreferredDaysSchedules))
+for i, sched in enumerate(notOnPreferredDaysSchedules):
+  print("")
+  print(f"Schedule {i + 1}: ")
+  for section in sched:
+    print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
 
 
 '''

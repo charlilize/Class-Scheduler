@@ -5,9 +5,9 @@ TuTh: Kishore Konda Chidella 10:00AM - 11:15AM in Web live | Open
 TuTh: Kishore Konda Chidella 1:00PM - 2:15PM in BEH 113 | Open 
 MoWe: Sam Black 8:30AM - 9:45AM in BEH 107 | Wait List 
 
-=== All Sections for GEOL 102: ===
-TuTh: Ganqing Jiang 2:30PM - 3:45PM in WRI C148 | Open 
-Mo: Staff 5:30PM - 8:15PM in LFG 105 | Open 
-We: Staff 5:30PM - 8:15PM in LFG 105 | Open 
-Fr: Staff 8:30AM - 11:15AM in LFG 105 | Open 
-Fr: Staff 1:00PM - 3:45PM in LFG 105 | Open 
+=== All Sections for CS 302: ===
+MoWe: James Andro-Vasko 4:00PM - 5:15PM in HFA 257 | Wait List 
+TuTh: James Andro-Vasko 5:30PM - 6:45PM in TBE B-176 | Wait List 
+MoWe: Staff 1:00PM - 2:15PM in TBE B-176 | Open 
+TuTh: Shaikh Arifuzzaman 1:00PM - 2:15PM in BEH 121 | Open 
+MoWe: Staff 11:30AM - 12:45PM in GUA 2212 | Open 
