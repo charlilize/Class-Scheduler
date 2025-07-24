@@ -139,10 +139,8 @@ unwantedDays = []
 for day in rawUnwantedDays:
   if day in daysOfTheWeek:
     unwantedDays.append(abbreviateDay(day))
-  elif not rawUnwantedDays:
+  elif day:
     print(f"{day} is not a valid day of the week. Removed {day}.")
-
-print(unwantedDays)
 
 service = Service(executable_path="./chromedriver")
 driver = webdriver.Chrome(service=service)
@@ -265,8 +263,13 @@ for k, sched in enumerate(schedules):
 #     print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
 
 # Filter out schedules that are on unwanted days of the week, if there are any
-# if unwantedDays:
+preferredDaysSchedules, notOnPreferredDaysSchedules = [], []
 
+# if unwantedDays:
+#   for i, sched in enumerate(validSchedules):
+#     onPreferredDays = True
+#     for section in sched:
+#       for day in unwantedDays:
 
 
 '''
