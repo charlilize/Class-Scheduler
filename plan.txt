@@ -1,4 +1,3 @@
-
 ''' 
 1. figure out how to create a schedule
 A schedule is valid if:
@@ -11,7 +10,8 @@ A schedule is valid if:
 
 other tasks:
 - could possibly get rid of the week structure, don't need it ✅
-- make it print the schedules on wanted days then do an option to display schedules that are not on wanted days
+- make it print the schedules on wanted days ✅
+- create an option to display schedules that are not on wanted days ✅
 - maybe add rate my professor and use AI to advise which is the best schedule to go with
 - seperate functions into a different file
 '''

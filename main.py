@@ -229,12 +229,14 @@ for subject, courseNum in userCourses:
 
     time.sleep(5)
 
+driver.close()
+
 # 2D array, where element[i] is all the sections for a specific course
 coursesList = [[] for _ in range(len(userCourses))] 
 
 # Output in file all the available sections for each user course
 with open("output.txt", "w") as file:
-  file.write("***************** SCHEDULE BUILDER *****************\n")
+  file.write("    ***************** SCHEDULE BUILDER *****************\n")
 
   for i, course in enumerate(userCourses):            
     fullCourseName = course[0] + " " + course[1]
@@ -275,21 +277,42 @@ if unwantedDays:
       preferredDaysSchedules.append(sched)
     else:
       notOnPreferredDaysSchedules.append(sched)
+
 # No need to filter if there's no schedule limitations
 else: 
   preferredDaysSchedules = validSchedules
 
+# Write schedules on preferred days to file
 writeSchedules("""
- _.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._
-          Schedules Matching Your Preferred Days
- ,'_.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._`.
+    _.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._
+            Schedules Matching Your Preferred Days
+    ,'_.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._`.
 """, preferredDaysSchedules)
 
+if not preferredDaysSchedules:
+  print("Oops! No schedules seem to match your ideal days.")
+  with open("output.txt", "a") as f:
+    f.write("\No schedules seem to match your ideal days.\n")
 
-# check if it outputs properly to output.txt
+# Write schedules not on preferred days if wanted by user
+while True:
+  answer = input("(Y/N) Would you like to see the other schedules that don't fall within your ideal days? ")
+  answer = answer.lower()
+
+  if answer == "y":
+    writeSchedules("""
+    .-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.
+                            Other Possible Schedules
+    .-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.
+    """, notOnPreferredDaysSchedules)
+    break 
+  elif answer == "n":
+    break
+  else:
+    print("Not an answer.")
 
 '''
-23 VALID for: CS 302, GRC 380, CS 219
+23 total valid schedules for: CS 302, GRC 380, CS 219
 class ClassSection:
   def __init__(self):
     self.course

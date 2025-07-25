@@ -1,21 +1,40 @@
-***************** SCHEDULE BUILDER *****************
+    ***************** SCHEDULE BUILDER *****************
 
 === All Sections for CS 219: ===
 TuTh: Kishore Konda Chidella 10:00AM - 11:15AM in Web live | Open 
 TuTh: Kishore Konda Chidella 1:00PM - 2:15PM in BEH 113 | Open 
-MoWe: Sam Black 8:30AM - 9:45AM in BEH 107 | Wait List 
+MoWe: Sam Black 8:30AM - 9:45AM in BEH 107 | Open 
 
-=== All Sections for CS 302: ===
-MoWe: James Andro-Vasko 4:00PM - 5:15PM in HFA 257 | Wait List 
-TuTh: James Andro-Vasko 5:30PM - 6:45PM in TBE B-176 | Wait List 
-MoWe: Staff 1:00PM - 2:15PM in TBE B-176 | Open 
-TuTh: Shaikh Arifuzzaman 1:00PM - 2:15PM in BEH 121 | Open 
-MoWe: Staff 11:30AM - 12:45PM in GUA 2212 | Open 
+=== All Sections for GRC 380: ===
+TuTh: Ashley Doughty 8:30AM - 11:15AM in GRA 239B | Open 
+MoWe: Ryan Almazan 5:30PM - 8:15PM in Web live | Open 
 
- _.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._
-          Schedules Matching Your Preferred Days
- ,'_.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._`.
+    _.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._
+            Schedules Matching Your Preferred Days
+    ,'_.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._`.
 
-Schedule 1: TuTh CS 219: Kishore Konda Chidella 10:00AM - 11:15AM in Web live | OpenTuTh CS 302: James Andro-Vasko 5:30PM - 6:45PM in TBE B-176 | Wait List
-Schedule 2: TuTh CS 219: Kishore Konda Chidella 10:00AM - 11:15AM in Web live | OpenTuTh CS 302: Shaikh Arifuzzaman 1:00PM - 2:15PM in BEH 121 | Open
-Schedule 3: TuTh CS 219: Kishore Konda Chidella 1:00PM - 2:15PM in BEH 113 | OpenTuTh CS 302: James Andro-Vasko 5:30PM - 6:45PM in TBE B-176 | Wait List
+No schedules seem to match your ideal days.
+
+    .-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.
+                            Other Possible Schedules
+    .-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.
+    
+Schedule 1: 
+TuTh CS 219: Kishore Konda Chidella 10:00AM - 11:15AM in Web live | Open
+MoWe GRC 380: Ryan Almazan 5:30PM - 8:15PM in Web live | Open
+
+Schedule 2: 
+TuTh CS 219: Kishore Konda Chidella 1:00PM - 2:15PM in BEH 113 | Open
+TuTh GRC 380: Ashley Doughty 8:30AM - 11:15AM in GRA 239B | Open
+
+Schedule 3: 
+TuTh CS 219: Kishore Konda Chidella 1:00PM - 2:15PM in BEH 113 | Open
+MoWe GRC 380: Ryan Almazan 5:30PM - 8:15PM in Web live | Open
+
+Schedule 4: 
+MoWe CS 219: Sam Black 8:30AM - 9:45AM in BEH 107 | Open
+TuTh GRC 380: Ashley Doughty 8:30AM - 11:15AM in GRA 239B | Open
+
+Schedule 5: 
+MoWe CS 219: Sam Black 8:30AM - 9:45AM in BEH 107 | Open
+MoWe GRC 380: Ryan Almazan 5:30PM - 8:15PM in Web live | Open
