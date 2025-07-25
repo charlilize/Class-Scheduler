@@ -14,4 +14,13 @@ other tasks:
 - create an option to display schedules that are not on wanted days ✅
 - maybe add rate my professor and use AI to advise which is the best schedule to go with
 - seperate functions into a different file
+
+
+schedule_utils.py → helper functions related to course scheduling
+
+scraper_helpers.py → functions for web scraping (like finding buttons, typing inputs)
+
+parser.py → functions for parsing text from the page
+
+main.py → where the logic ties together and calls the helper functions
 '''

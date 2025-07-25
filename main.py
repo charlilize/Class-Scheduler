@@ -1,12 +1,11 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import time
 from bs4 import BeautifulSoup
 import re
 from itertools import product
+from schedule_utils import *
+from parser_utils import *
 
 ''' TO STORE COURSES FOUND INFO '''
 class ClassSection:
@@ -35,108 +34,6 @@ meetingInfoID = "^MTG_DAYTIME"
 roomID = "^MTG_ROOM"
 newSearchBtnID = "CLASS_SRCH_WRK2_SSR_PB_NEW_SEARCH$3$"
 statusID = "^win10divDERIVED_CLSRCH_SSR_STATUS_LONG"
-
-''' FUNCTIONS '''
-# Abbreviates day of the week to the format of the website
-def abbreviateDay(day):
-  if day == "monday":
-    return "Mo"
-  elif day == "tuesday":
-    return "Tu"
-  elif day == "wednesday":
-    return "We"
-  elif day == "thursday":
-    return "Th"
-  elif day == "friday":
-    return "Fr"
-  elif day == "saturday":
-    return "Sa"
-  else:
-    return "Su"
-
-# Function to type text in given element field slowly
-def typeInField(inputElement, text):
-  text = str(text)
-
-  inputElement.clear()
-
-  for char in text:
-    inputElement.send_keys(char)
-    time.sleep(0.5)
-
-# Function that returns an element with a given ID
-def getElementByID(ID, purposeOfElement):
-  # Wait for 10 seconds for the element to exist before crashing program
-  try: 
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located(
-      (By.ID, ID)
-    ))
-  except:
-    print(f"Couldn't work on {purposeOfElement}")
-
-  print(f"✅ Working on {purposeOfElement}...")
-
-  # Return the input field
-  return driver.find_element(By.ID, ID)
-
-# Takes in a string: "10:00PM" and returns the military time: 2200
-def convertToMilitaryTime(time):
-  
-  hour, minutes = [part.strip() for part in time.split(":")]  # Remove colon
-
-  # If the time is PM or is during 12AM, convert it
-  if "PM" in time or ("12" in time and "AM" in time):          
-    # Edge case where 12PM doesn't need to be converted 
-    if not ("12" in time and "PM" in time):
-      hour = int(hour)
-      hour += 12
-
-      # Reset back to 0 if at 24 mark
-      if hour == 24:
-        hour = 0
-
-      hour = str(hour)
-
-  time = hour + minutes
-  time = time[:-2]                                            # Remove AM/PM
-
-  return int(time)  
-
-# Takes in two classes and returns True if the sections have conflicting times
-def isOverlapping(section1, section2):
-
-  # Edge case if they're on different days
-  if section1.days != section2.days:
-    return False
-  
-  # Edge case if one of the section's days are unknown
-  if section1.days == "TBA" or section2.days == "TBA":
-    return False
-  
-  # Convert the sections' time range to military time
-  section1Times = [part.strip() for part in section1.time.split("-")]
-  section2Times = [part.strip() for part in section2.time.split("-")]
-  startSection1, endSection1 = convertToMilitaryTime(section1Times[0]), convertToMilitaryTime(section1Times[1])
-  startSection2, endSection2 = convertToMilitaryTime(section2Times[0]), convertToMilitaryTime(section2Times[1])
-
-  # Make sure that the end of the first class + 15 is less than the start of the second class 
-  return not (endSection1 + 15 <= startSection2 or endSection2 + 15 <= startSection1)
-
-# Prints out the schedules of a list, where i is a schedule and each element[i] is a list of ClassSections
-def printSchedules(schedules):
-  for i, sched in enumerate(schedules):
-    print(f"\nSchedule {i + 1}: ")
-    for section in sched:
-      print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
-
-# Writes out the schedules of a list, where i is a schedule and each element[i] is a list of ClassSections
-def writeSchedules(title, schedules):
-  with open("output.txt", "a") as f:
-    f.write(title)
-    for i, sched in enumerate(schedules):
-      f.write(f"\nSchedule {i + 1}: \n")
-      for section in sched:
-        f.write(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}\n")
 
 ''' MAIN PROGRAM '''
 # Gather the class info before searching
@@ -178,19 +75,19 @@ for subject, courseNum in userCourses:
   print(f"\n== Finding {subject} {courseNum} ==")
 
   ''' --------- ENTER THE CLASS SUBJECT ---------------- '''
-  classInputElement = getElementByID(classSearchFieldID, "class name")                # Get the input field
+  classInputElement = getElementByID(driver, classSearchFieldID, "class name")                # Get the input field
   typeInField(classInputElement, subject)                                             # Enter class slowly
 
   ''' --------- ENTER THE COURSE NUMBER ---------------- '''
-  courseNumInputElement = getElementByID(courseNumberFieldID, "course number")
+  courseNumInputElement = getElementByID(driver, courseNumberFieldID, "course number")
   typeInField(courseNumInputElement, courseNum)
 
   # Uncheck the open classes field
-  openClassesCheckbox = getElementByID(showOpenClassesCheckboxID, "unchecking open classes checkbox")
+  openClassesCheckbox = getElementByID(driver, showOpenClassesCheckboxID, "unchecking open classes checkbox")
   openClassesCheckbox.click()
 
   ''' --------- SEARCHING FOR CLASSES ---------------- '''
-  searchBtn = getElementByID(searchBtnID, "search button")
+  searchBtn = getElementByID(driver, searchBtnID, "search button")
   searchBtn.click()
 
   print("✅ Searching for courses...")
@@ -224,7 +121,7 @@ for subject, courseNum in userCourses:
       # Add to list
       allSections.append(ClassSection(f"{subject} {courseNum}", status, timeBlock, instructor, room, days))
 
-    newSearchBtn = getElementByID(newSearchBtnID, "new search")
+    newSearchBtn = getElementByID(driver, newSearchBtnID, "new search")
     newSearchBtn.click()
 
     time.sleep(5)
@@ -292,11 +189,11 @@ writeSchedules("""
 if not preferredDaysSchedules:
   print("Oops! No schedules seem to match your ideal days.")
   with open("output.txt", "a") as f:
-    f.write("\No schedules seem to match your ideal days.\n")
+    f.write("\nNo schedules seem to match your ideal days.\n")
 
 # Write schedules not on preferred days if wanted by user
 while True:
-  answer = input("(Y/N) Would you like to see the other schedules that don't fall within your ideal days? ")
+  answer = input("\n(Y/N) Would you like to see the other schedules that don't fall within your ideal days? ")
   answer = answer.lower()
 
   if answer == "y":

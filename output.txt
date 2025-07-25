@@ -13,7 +13,9 @@ MoWe: Ryan Almazan 5:30PM - 8:15PM in Web live | Open
             Schedules Matching Your Preferred Days
     ,'_.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._`.
 
-No schedules seem to match your ideal days.
+Schedule 1: 
+TuTh CS 219: Kishore Konda Chidella 1:00PM - 2:15PM in BEH 113 | Open
+TuTh GRC 380: Ashley Doughty 8:30AM - 11:15AM in GRA 239B | Open
 
     .-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.
                             Other Possible Schedules
@@ -25,16 +27,12 @@ MoWe GRC 380: Ryan Almazan 5:30PM - 8:15PM in Web live | Open
 
 Schedule 2: 
 TuTh CS 219: Kishore Konda Chidella 1:00PM - 2:15PM in BEH 113 | Open
-TuTh GRC 380: Ashley Doughty 8:30AM - 11:15AM in GRA 239B | Open
-
-Schedule 3: 
-TuTh CS 219: Kishore Konda Chidella 1:00PM - 2:15PM in BEH 113 | Open
 MoWe GRC 380: Ryan Almazan 5:30PM - 8:15PM in Web live | Open
 
-Schedule 4: 
+Schedule 3: 
 MoWe CS 219: Sam Black 8:30AM - 9:45AM in BEH 107 | Open
 TuTh GRC 380: Ashley Doughty 8:30AM - 11:15AM in GRA 239B | Open
 
-Schedule 5: 
+Schedule 4: 
 MoWe CS 219: Sam Black 8:30AM - 9:45AM in BEH 107 | Open
 MoWe GRC 380: Ryan Almazan 5:30PM - 8:15PM in Web live | Open
