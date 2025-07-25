@@ -6,7 +6,6 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from bs4 import BeautifulSoup
 import re
-from collections import defaultdict
 from itertools import product
 
 ''' TO STORE COURSES FOUND INFO '''
@@ -123,6 +122,21 @@ def isOverlapping(section1, section2):
   # Make sure that the end of the first class + 15 is less than the start of the second class 
   return not (endSection1 + 15 <= startSection2 or endSection2 + 15 <= startSection1)
 
+# Prints out the schedules of a list, where i is a schedule and each element[i] is a list of ClassSections
+def printSchedules(schedules):
+  for i, sched in enumerate(schedules):
+    print(f"\nSchedule {i + 1}: ")
+    for section in sched:
+      print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
+
+# Writes out the schedules of a list, where i is a schedule and each element[i] is a list of ClassSections
+def writeSchedules(title, schedules):
+  with open("output.txt", "a") as f:
+    f.write(title)
+    for i, sched in enumerate(schedules):
+      f.write(f"\nSchedule {i + 1}: \n")
+      for section in sched:
+        f.write(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}\n")
 
 ''' MAIN PROGRAM '''
 # Gather the class info before searching
@@ -250,8 +264,6 @@ for k, sched in enumerate(schedules):
 # Filter out schedules that are on unwanted days of the week, if there are any
 preferredDaysSchedules, notOnPreferredDaysSchedules = [], []
 
-print("VALID SCHEDULES: ", len(validSchedules))
-
 if unwantedDays:
   for i, sched in enumerate(validSchedules):
     onPreferredDays = True
@@ -267,37 +279,17 @@ if unwantedDays:
 else: 
   preferredDaysSchedules = validSchedules
 
-
-# Debugging (prints all the schedules that don't have time conflicts)
-print("preferredDaysSchedules:", len(preferredDaysSchedules))
-for i, sched in enumerate(preferredDaysSchedules):
-  print("")
-  print(f"Schedule {i + 1}: ")
-  for section in sched:
-    print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
+writeSchedules("""
+ _.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._
+          Schedules Matching Your Preferred Days
+ ,'_.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._`.
+""", preferredDaysSchedules)
 
 
-# Debugging (prints all the schedules that don't have time conflicts)
-print("notpreferredDaysSchedules:", len(notOnPreferredDaysSchedules))
-for i, sched in enumerate(notOnPreferredDaysSchedules):
-  print("")
-  print(f"Schedule {i + 1}: ")
-  for section in sched:
-    print(f"{section.days} {section.course}: {section.professor} {section.time} in {section.room} | {section.status}")
-
+# check if it outputs properly to output.txt
 
 '''
-
-- filter through valid schedules
-- create an array called preferredDaysSchedules, notOnPreferredDaysSchedules
-- loop through each validSchedules
--   onPreferredDays = True
--   loop through each section in sched
--     loop through filtered unwanted days
--       if current day in unwantedDays is in section.days
--         onPreferredDays = False
--   if onPreferredDays, preferredDaysSchedules.append(sched), else append to notOnPreferredDaysSchedules
-
+23 VALID for: CS 302, GRC 380, CS 219
 class ClassSection:
   def __init__(self):
     self.course
@@ -305,12 +297,6 @@ class ClassSection:
     self.time
     self.professor
     self.room
-
-sections = {
-  MoWe: [ClassSection("CS 219"), ClassSection("CS 302")]
-  TuTh: []
-  Fri: [ClassSection("CS 219")]
-}
 '''
 
 print("Done!")

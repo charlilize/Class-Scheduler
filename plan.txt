@@ -7,9 +7,11 @@ A schedule is valid if:
 
 2. figure out how to filter according to days unwanted 
 * follows a valid schedule AND ✅
-* creates a schedule, if possible, that doesn't take place on filteredUnwantedDays
+* creates a schedule, if possible, that doesn't take place on filteredUnwantedDays ✅
 
 other tasks:
-- could possibly get rid of the week structure, don't need it 
+- could possibly get rid of the week structure, don't need it ✅
 - make it print the schedules on wanted days then do an option to display schedules that are not on wanted days
+- maybe add rate my professor and use AI to advise which is the best schedule to go with
+- seperate functions into a different file
 '''
