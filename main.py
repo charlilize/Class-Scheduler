@@ -82,6 +82,8 @@ for subject, courseNum in userCourses:
   courseNumInputElement = getElementByID(driver, courseNumberFieldID, "course number")
   typeInField(courseNumInputElement, courseNum)
 
+  time.sleep(1)
+
   # Uncheck the open classes field
   openClassesCheckbox = getElementByID(driver, showOpenClassesCheckboxID, "unchecking open classes checkbox")
   openClassesCheckbox.click()
@@ -208,17 +210,5 @@ while True:
   else:
     print("Not an answer.")
 
-'''
-23 total valid schedules for: CS 302, GRC 380, CS 219
-class ClassSection:
-  def __init__(self):
-    self.course
-    self.status
-    self.time
-    self.professor
-    self.room
-'''
-
 print("Done!")
-
 
