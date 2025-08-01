@@ -1,4 +1,4 @@
-# Schedule-Builder
+# Class-Builder
 
 This is a Python project that builds class schedules based on user input and constraints.
 
